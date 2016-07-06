@@ -1,0 +1,2 @@
+# superlists
+Django learning project
