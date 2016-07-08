@@ -35,20 +35,24 @@ class NewVisitorTest(unittest.TestCase):
         # When she hits enter, the page updates, and the page now
         # lists "1: Buy more artisanal cheeses" as an item on a to-do list
         inputbox.send_keys(Keys.ENTER)
-
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1: Buy more artisanal cheeses' for row in rows),
-                        "New todo item did not appear in table")
+        self.assertIn('1: Buy more artisanal cheeses', [row.text for row in rows])
 
         # There is still a textbox inviting here to enter another item
         # she enters "Host a fancy party with fancy cheeses"
-        self.fail('Finish the test!')
-        # the page updates again, showing both her inputs
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Host a fancy party with fancy cheeses')
+        inputbox.send_keys(Keys.ENTER)
 
+        # the page updates again, showing both her inputs
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Buy more artisanal cheeses', [row.text for row in rows])
+        self.assertIn('2: Host a fancy party with fancy cheese', [rows.text for row in rows])
         # Mary begins to wonder if the site will remember her list, but the
         # site explains that it has generated a unique URL for her to save
-
+        self.fail('Finish the test!')
         # She visits the URL -- the list is there!
 
         # Satisified, she leaves the page
