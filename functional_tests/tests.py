@@ -69,7 +69,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Frank starts a new list by entering a new item. He is
         # significantly less creative than Mary
-        inputbox = self.browser.find_element_by_tag_name('id_new_item')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy pork chops')
         inputbox.send_keys(Keys.ENTER)
 
