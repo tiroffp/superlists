@@ -40,6 +40,8 @@ class NewVisitorTest(LiveServerTestCase):
         # When she hits enter, the page updates, and the page now
         # lists "1: Buy more artisanal cheeses" as an item on a to-do list
         inputbox.send_keys(Keys.ENTER)
+        mary_list_url = self.browser.current_url
+        self.assertRegex(mary_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy more artisanal cheeses')
 
         # There is still a textbox inviting here to enter another item
@@ -52,9 +54,34 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_row_in_list_table('1: Buy more artisanal cheeses')
         self.check_for_row_in_list_table('2: Host a fancy party with fancy cheeses')
 
-        # Mary begins to wonder if the site will remember her list, but the
-        # site explains that it has generated a unique URL for her to save
-        self.fail('Finish the test!')
-        # She visits the URL -- the list is there!
+        # now a new user, Frank, comes along to the site
 
-        # Satisified, she leaves the page
+        ## We use a new browser session to make sure that no information
+        ## of Edith's is coming through cookies, etc
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        #Frank visits the home page. There is no sign of Mary's list
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy more artisanal cheeses', page_text)
+        self.assertNotIn('Host a fancy party with fancy cheeses', page_text)
+
+        # Frank starts a new list by entering a new item. He is
+        # significantly less creative than Mary
+        inputbox = self.browser.find_element_by_tag_name('id_new_item')
+        inputbox.send_keys('Buy pork chops')
+        inputbox.send_keys(Keys.ENTER)
+
+        # Frank gets his own unique URL
+        frank_lists_url = self.browser.current_url
+        self.assertRegex(frank_lists_url, '/lists/.+')
+        self.assertNotEqual(frank_lists_url, mary_list_url)
+
+        # Again, there is no trace of Mary's list
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy more artisanal cheeses', page_text)
+        self.assertIn('Buy pork chops', page_text)
+
+        # Satisified, he leaves the page
+        self.browser.quit()
