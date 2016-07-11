@@ -12,6 +12,11 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Mary has been losing track of all the things she needs to do
         # and sees an ad for a to-do list site. She goes to check out the
@@ -35,9 +40,7 @@ class NewVisitorTest(unittest.TestCase):
         # When she hits enter, the page updates, and the page now
         # lists "1: Buy more artisanal cheeses" as an item on a to-do list
         inputbox.send_keys(Keys.ENTER)
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Buy more artisanal cheeses', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy more artisanal cheeses')
 
         # There is still a textbox inviting here to enter another item
         # she enters "Host a fancy party with fancy cheeses"
@@ -46,10 +49,9 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
 
         # the page updates again, showing both her inputs
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Buy more artisanal cheeses', [row.text for row in rows])
-        self.assertIn('2: Host a fancy party with fancy cheese', [rows.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy more artisanal cheeses')
+        self.check_for_row_in_list_table('2: Host a fancy party with fancy cheese')
+
         # Mary begins to wonder if the site will remember her list, but the
         # site explains that it has generated a unique URL for her to save
         self.fail('Finish the test!')
