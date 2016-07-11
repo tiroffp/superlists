@@ -1,9 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
+from django.test import LiveServerTestCase
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -21,7 +21,7 @@ class NewVisitorTest(unittest.TestCase):
         # Mary has been losing track of all the things she needs to do
         # and sees an ad for a to-do list site. She goes to check out the
         #homepage
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # She notices that the title mentions to-do lists, so she
         # knows shes on the right site
@@ -58,6 +58,3 @@ class NewVisitorTest(unittest.TestCase):
         # She visits the URL -- the list is there!
 
         # Satisified, she leaves the page
-
-if __name__ == '__main__':
-    unittest.main()
