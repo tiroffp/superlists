@@ -50,7 +50,7 @@ class NewVisitorTest(unittest.TestCase):
 
         # the page updates again, showing both her inputs
         self.check_for_row_in_list_table('1: Buy more artisanal cheeses')
-        self.check_for_row_in_list_table('2: Host a fancy party with fancy cheese')
+        self.check_for_row_in_list_table('2: Host a fancy party with fancy cheeses')
 
         # Mary begins to wonder if the site will remember her list, but the
         # site explains that it has generated a unique URL for her to save
