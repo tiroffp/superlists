@@ -1,22 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from functional_tests.base import FunctionalTest
 
 
-class NewVisitorTest(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        self.browser.implicitly_wait(3)
-
-    def tearDown(self):
-        self.browser.refresh()
-        self.browser.quit()
-
-    def check_for_row_in_list_table(self, row_text):
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text, [row.text for row in rows])
+class NewVisitorTest(FunctionalTest):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Mary has been losing track of all the things she needs to do
@@ -58,7 +45,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # now a new user, Frank, comes along to the site
 
         ## We use a new browser session to make sure that no information
-        ## of Edith's is coming through cookies, etc
+        ## of Mary's is coming through cookies, etc
         self.browser.refresh()
         self.browser.quit()
         self.browser = webdriver.Firefox()
@@ -86,18 +73,3 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertIn('Buy pork chops', page_text)
 
         # Satisified, he leaves the page
-
-    def test_layout_and_styling(self):
-        # Mary goes to the homepage
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1034, 768)
-
-        # She notices the input box is nicely centered
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2,
-                               512, delta=5)
-        # She starts a new list and sees the input box remains nicely centered
-        inputbox.send_keys('testing\n')
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2,
-                               512, delta=5)
