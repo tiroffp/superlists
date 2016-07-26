@@ -18,7 +18,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn("To-Do", header_text)
 
         # She is invited to make a list right away
-        inputbox = self.get_item_input_box
+        inputbox = self.get_item_input_box()
         self.assertEqual(inputbox.get_attribute('placeholder'),
                          'Enter a to-do item')
 
@@ -34,7 +34,7 @@ class NewVisitorTest(FunctionalTest):
 
         # There is still a textbox inviting here to enter another item
         # she enters "Host a fancy party with fancy cheeses"
-        inputbox = self.get_item_input_box
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Host a fancy party with fancy cheeses')
         inputbox.send_keys(Keys.ENTER)
 
@@ -58,7 +58,7 @@ class NewVisitorTest(FunctionalTest):
 
         # Frank starts a new list by entering a new item. He is
         # significantly less creative than Mary
-        inputbox = self.get_item_input_box
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy pork chops')
         inputbox.send_keys(Keys.ENTER)
 
