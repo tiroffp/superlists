@@ -8,7 +8,7 @@ class NewVisitorTest(FunctionalTest):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Mary has been losing track of all the things she needs to do
         # and sees an ad for a to-do list site. She goes to check out the
-        #homepage
+        # homepage
         self.browser.get(self.live_server_url)
 
         # She notices that the title mentions to-do lists, so she
@@ -17,8 +17,8 @@ class NewVisitorTest(FunctionalTest):
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn("To-Do", header_text)
 
-        #She is invited to make a list right away
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        # She is invited to make a list right away
+        inputbox = self.get_item_input_box
         self.assertEqual(inputbox.get_attribute('placeholder'),
                          'Enter a to-do item')
 
@@ -34,7 +34,7 @@ class NewVisitorTest(FunctionalTest):
 
         # There is still a textbox inviting here to enter another item
         # she enters "Host a fancy party with fancy cheeses"
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box
         inputbox.send_keys('Host a fancy party with fancy cheeses')
         inputbox.send_keys(Keys.ENTER)
 
@@ -44,13 +44,13 @@ class NewVisitorTest(FunctionalTest):
 
         # now a new user, Frank, comes along to the site
 
-        ## We use a new browser session to make sure that no information
-        ## of Mary's is coming through cookies, etc
+        # # We use a new browser session to make sure that no information
+        # # of Mary's is coming through cookies, etc
         self.browser.refresh()
         self.browser.quit()
         self.browser = webdriver.Firefox()
 
-        #Frank visits the home page. There is no sign of Mary's list
+        # Frank visits the home page. There is no sign of Mary's list
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy more artisanal cheeses', page_text)
@@ -58,7 +58,7 @@ class NewVisitorTest(FunctionalTest):
 
         # Frank starts a new list by entering a new item. He is
         # significantly less creative than Mary
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box
         inputbox.send_keys('Buy pork chops')
         inputbox.send_keys(Keys.ENTER)
 
